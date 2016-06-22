@@ -8,7 +8,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
+
+import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.processing.URLProcessor;
 
 public class OverlayService extends Service {
     private static final String EXTRA_URL = "url";
@@ -17,6 +19,12 @@ public class OverlayService extends Service {
         Intent intent = new Intent(context, OverlayService.class);
         intent.putExtra(EXTRA_URL, url);
         context.startService(intent);
+    }
+
+    private URLProcessor processor;
+
+    public OverlayService() {
+        processor = new URLProcessor();
     }
 
     @Override
@@ -45,6 +53,16 @@ public class OverlayService extends Service {
     }
 
     private void process(String url) {
-        
+        processor.process(url, new URLProcessor.Callback() {
+            @Override
+            public void onWebCardCreated(WebCard card) {
+
+            }
+
+            @Override
+            public void onWebCardFailed(String url) {
+
+            }
+        });
     }
 }
