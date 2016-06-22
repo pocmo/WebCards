@@ -21,17 +21,17 @@ public class URLActivity extends Activity {
 
         final Intent intent = getIntent();
         if (intent == null) {
-            finishAndRemoveTask();
+            finishAffinity();
             return;
         }
 
         final String url = intent.getDataString();
         if (TextUtils.isEmpty(url)) {
-            finishAndRemoveTask();
+            finishAffinity();
             return;
         }
 
         OverlayService.processUrl(this, url);
-        finishAndRemoveTask();
+        finishAffinity();
     }
 }
