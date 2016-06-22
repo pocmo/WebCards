@@ -19,6 +19,8 @@ public class URLActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        overridePendingTransition(0, 0);
+
         final Intent intent = getIntent();
         if (intent == null) {
             finishAffinity();
