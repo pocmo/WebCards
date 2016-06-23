@@ -47,6 +47,11 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
         }
     }
 
+    public void removeCards() {
+        cards.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         WebCard card = cards.get(position);

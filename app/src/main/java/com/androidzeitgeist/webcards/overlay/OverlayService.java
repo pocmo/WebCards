@@ -53,23 +53,7 @@ public class OverlayService extends Service {
             overlayView = (OverlayView) LayoutInflater.from(this).inflate(R.layout.overlay, null);
         }
 
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-
-        layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-
-        try {
-            windowManager.addView(overlayView, layoutParams);
-        } catch (final SecurityException | WindowManager.BadTokenException e) {
-            // We do not have the permission to add a view to the window ("draw over other apps")
-            return;
-        }
+        overlayView.show();
     }
 
     @Override
