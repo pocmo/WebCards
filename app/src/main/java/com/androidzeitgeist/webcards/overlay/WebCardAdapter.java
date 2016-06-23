@@ -17,6 +17,7 @@ import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.overlay.viewholder.DefaultViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.ErrorViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.PlaceholderViewHolder;
+import com.androidzeitgeist.webcards.overlay.viewholder.VideoViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.WebCardViewHolder;
 
 import java.util.ArrayList;
@@ -63,6 +64,9 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
             case ERROR:
                 return R.layout.card_error;
 
+            case VIDEO:
+                return R.layout.card_video;
+
             default:
                 return R.layout.card_default;
         }
@@ -78,6 +82,9 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
             case R.layout.card_error:
                 return new ErrorViewHolder(view);
+
+            case R.layout.card_video:
+                return new VideoViewHolder(view);
 
             default:
                 return new DefaultViewHolder(view);
