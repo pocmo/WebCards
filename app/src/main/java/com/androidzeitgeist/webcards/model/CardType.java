@@ -4,7 +4,12 @@
 
 package com.androidzeitgeist.webcards.model;
 
+import android.text.TextUtils;
+
 public enum CardType {
+    PLACEHOLDER,
+    ERROR,
+
     DEFAULT,
 
     ARTICLE,
@@ -12,6 +17,10 @@ public enum CardType {
     VIDEO;
 
     public static CardType fromString(String value) {
+        if (TextUtils.isEmpty(value)) {
+            return DEFAULT;
+        }
+
         switch (value) {
             case "article":
                 return ARTICLE;

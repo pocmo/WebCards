@@ -9,6 +9,24 @@ import android.text.TextUtils;
 import com.androidzeitgeist.featurizer.features.WebsiteFeatures;
 
 public class WebCard {
+    public static WebCard createPlaceholder(String url) {
+        WebCard card = new WebCard();
+
+        card.url = url;
+        card.type = CardType.PLACEHOLDER;
+
+        return card;
+    }
+
+    public static WebCard createError(String url) {
+        WebCard card = new WebCard();
+
+        card.url = url;
+        card.type = CardType.ERROR;
+
+        return card;
+    }
+
     public static WebCard createFromFeatures(WebsiteFeatures features) {
         if (TextUtils.isEmpty(features.getTitle())
                 || TextUtils.isEmpty(features.getUrl())
@@ -38,5 +56,17 @@ public class WebCard {
 
     public String getTitle() {
         return title;
+    }
+
+    public CardType getType() {
+        return type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

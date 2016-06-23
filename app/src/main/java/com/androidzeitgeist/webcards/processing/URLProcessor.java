@@ -4,6 +4,9 @@
 
 package com.androidzeitgeist.webcards.processing;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.androidzeitgeist.featurizer.Featurizer;
 import com.androidzeitgeist.featurizer.features.WebsiteFeatures;
 import com.androidzeitgeist.webcards.model.WebCard;
@@ -24,10 +27,12 @@ public class URLProcessor {
 
     private ExecutorService service;
     private Featurizer featurizer;
+    private Handler handler;
 
     public URLProcessor() {
         this.service = Executors.newCachedThreadPool();
         this.featurizer = new Featurizer();
+        this.handler = new Handler(Looper.getMainLooper());
     }
 
     public void process(final String url, final Callback callback) {
@@ -45,10 +50,30 @@ public class URLProcessor {
             final WebCard card = WebCard.createFromFeatures(features);
 
             if (card != null) {
-                callback.onWebCardCreated(card);
+                onWebCardCreated(card, callback);
+            } else {
+                onWebCardFailed(callback, url);
             }
         } catch (IOException e) {
-            callback.onWebCardFailed(url);
+            onWebCardFailed(callback, url);
         }
+    }
+
+    private void onWebCardCreated(final WebCard card, final Callback callback) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onWebCardCreated(card);
+            }
+        });
+    }
+
+    private void onWebCardFailed(final Callback callback, final String url) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onWebCardFailed(url);
+            }
+        });
     }
 }
