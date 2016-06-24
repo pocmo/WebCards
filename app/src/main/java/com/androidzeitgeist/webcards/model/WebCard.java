@@ -58,6 +58,16 @@ public class WebCard {
         return card;
     }
 
+    public static WebCard createPhotoCard(String photoUrl) {
+        WebCard card = new WebCard();
+
+        card.type = CardType.PHOTO;
+        card.url = photoUrl;
+        card.imageUrl = photoUrl;
+
+        return card;
+    }
+
     public static WebCard createDefaultCardFromFeatures(WebsiteFeatures features) {
         if (TextUtils.isEmpty(features.getTitle())
                 || TextUtils.isEmpty(features.getUrl())
@@ -72,6 +82,7 @@ public class WebCard {
         card.url = features.getUrl();
         card.iconUrl = features.getIconUrl();
         card.imageUrl = features.getImageUrl();
+        card.description = features.getDescription();
 
         card.type = CardType.DEFAULT;
 
@@ -83,6 +94,7 @@ public class WebCard {
     private String iconUrl;
     private String imageUrl;
     private CardType type;
+    private String description;
 
     public String getTitle() {
         return title;
@@ -102,5 +114,9 @@ public class WebCard {
 
     public String getIconUrl() {
         return iconUrl;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

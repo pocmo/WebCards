@@ -15,6 +15,13 @@
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.1"/>
+
         <RelativeLayout
             android:id="@+id/content"
             android:layout_toLeftOf="@id/image"
@@ -31,10 +38,22 @@
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:ellipsize="end"
                 android:textStyle="bold"
                 tools:text="Title goes here" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:maxLines="3"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:textSize="12sp"
+                tools:text="This is a description" />
 
             <ImageView
                 android:id="@+id/icon"

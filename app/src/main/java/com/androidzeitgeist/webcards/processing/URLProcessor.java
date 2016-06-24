@@ -67,7 +67,7 @@ public class URLProcessor {
         });
     }
 
-    private void processInternal(String url, Callback callback) throws IOException {
+    private void processInternal(String url, final Callback callback) throws IOException {
         final Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -77,7 +77,7 @@ public class URLProcessor {
 
         ResponseBody body = response.body();
 
-        Document document = Jsoup.parse(
+        final Document document = Jsoup.parse(
                 body.byteStream(),
                 body.contentType().charset(StandardCharsets.UTF_8).name(),
                 url);
@@ -105,10 +105,14 @@ public class URLProcessor {
             processVideo(document, features, callback);
         }
 
+        if ("instapp:photo".equals(features.getType()) || "flickr_photos:photo".equals(features.getType())) {
+            onWebCardCreated(WebCard.createPhotoCard(features.getImageUrl()), callback);
+        }
+
         processTwitter(document, callback);
     }
 
-    private void processVideo(Document document, WebsiteFeatures features, Callback callback) throws IOException {
+    private void processVideo(Document document, WebsiteFeatures features, Callback callback) {
         String videoURL;
         Elements urlElements = document.select("meta[property='og:video:url']");
         if (urlElements.isEmpty()) {

@@ -16,6 +16,7 @@ import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.overlay.viewholder.ArticleViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.DefaultViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.ErrorViewHolder;
+import com.androidzeitgeist.webcards.overlay.viewholder.PhotoViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.PlaceholderViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.TwitterViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.VideoViewHolder;
@@ -94,6 +95,9 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
             case TWITTER:
                 return R.layout.card_twitter;
 
+            case PHOTO:
+                return R.layout.card_photo;
+
             default:
                 return R.layout.card_default;
         }
@@ -118,6 +122,9 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
             case R.layout.card_twitter:
                 return new TwitterViewHolder(view);
+
+            case R.layout.card_photo:
+                return new PhotoViewHolder(view);
 
             default:
                 return new DefaultViewHolder(view);
