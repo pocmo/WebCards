@@ -83,7 +83,12 @@ public class URLProcessor {
                 url);
 
         final WebsiteFeatures features = featurizer.featurize(document);
-        
+        if (features == null) {
+            return;
+        }
+
+        Log.d(TAG, "Received features with type: " + features.getType());
+
         final WebCard card;
 
         if (TextUtils.isEmpty(features.getType()) && !TextUtils.isEmpty(features.getImageUrl())) {
