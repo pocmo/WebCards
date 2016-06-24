@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
@@ -56,15 +55,15 @@ public class OverlayView extends FrameLayout {
         }
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                         WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        layoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
 
         try {
             windowManager.addView(this, layoutParams);
@@ -88,13 +87,13 @@ public class OverlayView extends FrameLayout {
         }
 
         animate()
-                .translationY(getHeight())
+                .translationX(getWidth())
                 .setDuration(300)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         setVisibility(View.INVISIBLE);
-                        setTranslationY(0);
+                        setTranslationX(0);
 
                         adapter.removeCards();
 

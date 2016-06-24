@@ -13,29 +13,6 @@ public enum CardType {
     DEFAULT,
 
     ARTICLE,
-    PRODUCT,
-    VIDEO;
-
-    public static CardType fromString(String value) {
-        if (TextUtils.isEmpty(value)) {
-            return DEFAULT;
-        }
-
-        switch (value) {
-            case "article":
-                return ARTICLE;
-
-            case "product":
-                return PRODUCT;
-
-            case "video":
-            case "video.episode":
-            case "video.movie":
-            case "video.other":
-                return VIDEO;
-
-            default:
-                return DEFAULT;
-        }
-    }
+    TWITTER,
+    VIDEO
 }

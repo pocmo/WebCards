@@ -17,6 +17,8 @@ public class WebCardLayoutManager extends LinearLayoutManager {
     public WebCardLayoutManager(Context context, OverlayView overlayView) {
         super(context);
 
+        setReverseLayout(true);
+
         this.overlayView = overlayView;
     }
 

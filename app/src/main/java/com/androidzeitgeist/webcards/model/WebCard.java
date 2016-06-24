@@ -27,11 +27,41 @@ public class WebCard {
         return card;
     }
 
-    public static WebCard createFromFeatures(WebsiteFeatures features) {
+    public static WebCard createVideoCard(WebsiteFeatures features, String videoURL) {
+        WebCard card = createDefaultCardFromFeatures(features);
+
+        card.type = CardType.VIDEO;
+        card.url = videoURL;
+
+        return card;
+    }
+
+    public static WebCard createArticleCard(WebsiteFeatures features) {
+        WebCard card = createDefaultCardFromFeatures(features);
+
+        card.type = CardType.ARTICLE;
+
+        return card;
+    }
+
+    public static WebCard createTwitterCard(String handle) {
+        WebCard card = new WebCard();
+
+        if (handle.startsWith("@")) {
+            handle = handle.substring(1);
+        }
+
+        card.type = CardType.TWITTER;
+        card.title = "@" + handle;
+        card.url = "https://twitter.com/" + handle;
+
+        return card;
+    }
+
+    public static WebCard createDefaultCardFromFeatures(WebsiteFeatures features) {
         if (TextUtils.isEmpty(features.getTitle())
                 || TextUtils.isEmpty(features.getUrl())
-                || TextUtils.isEmpty(features.getIconUrl())
-                || TextUtils.isEmpty(features.getImageUrl())) {
+                || TextUtils.isEmpty(features.getIconUrl())) {
             // There are requires values missing.
             return null;
         }
@@ -43,7 +73,7 @@ public class WebCard {
         card.iconUrl = features.getIconUrl();
         card.imageUrl = features.getImageUrl();
 
-        card.type = CardType.fromString(features.getType());
+        card.type = CardType.DEFAULT;
 
         return card;
     }
@@ -68,5 +98,9 @@ public class WebCard {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
     }
 }

@@ -5,28 +5,25 @@
 package com.androidzeitgeist.webcards.overlay.viewholder;
 
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
-import com.squareup.picasso.Picasso;
 
 /**
- * View holder for video cards.
+ * View holder implementation for twitter cards.
  */
-public class VideoViewHolder extends WebCardViewHolder {
-    private ImageView imageView;
+public class TwitterViewHolder extends WebCardViewHolder {
+    private TextView titleView;
 
-    public VideoViewHolder(View itemView) {
+    public TwitterViewHolder(View itemView) {
         super(itemView);
 
-        imageView = (ImageView) itemView.findViewById(R.id.image);
+        this.titleView = (TextView) itemView.findViewById(R.id.title);
     }
 
     @Override
     public void bind(WebCard webCard) {
-        Picasso.with(itemView.getContext())
-                .load(webCard.getImageUrl())
-                .into(imageView);
+        titleView.setText(webCard.getTitle());
     }
 }

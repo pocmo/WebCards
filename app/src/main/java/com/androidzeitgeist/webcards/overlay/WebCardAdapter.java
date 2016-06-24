@@ -4,19 +4,20 @@
 
 package com.androidzeitgeist.webcards.overlay;
 
-import android.animation.Animator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 
 import com.androidzeitgeist.webcards.R;
+import com.androidzeitgeist.webcards.model.CardType;
 import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.overlay.viewholder.ArticleViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.DefaultViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.ErrorViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.PlaceholderViewHolder;
+import com.androidzeitgeist.webcards.overlay.viewholder.TwitterViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.VideoViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.WebCardViewHolder;
 
@@ -38,19 +39,23 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
     }
 
     public void addCard(WebCard card) {
-        // Currently we just deal with one card for simplicity.
-        if (cards.isEmpty()) {
-            cards.add(card);
-            notifyItemInserted(0);
-        } else {
-            cards.set(0, card);
-            notifyItemChanged(0);
+        if (cards.size() == 1) {
+            if (cards.get(0).getType() == CardType.PLACEHOLDER) {
+                cards.set(0, card);
+                notifyItemChanged(0);
+                return;
+            }
         }
+
+        cards.add(card);
+        notifyItemInserted(cards.size() - 1);
     }
 
     public void removeCards() {
         cards.clear();
         notifyDataSetChanged();
+
+        lastAnimatedPosition = -1;
     }
 
     @Override
@@ -66,6 +71,12 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
             case VIDEO:
                 return R.layout.card_video;
+
+            case ARTICLE:
+                return R.layout.card_article;
+
+            case TWITTER:
+                return R.layout.card_twitter;
 
             default:
                 return R.layout.card_default;
@@ -85,6 +96,12 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
             case R.layout.card_video:
                 return new VideoViewHolder(view);
+
+            case R.layout.card_article:
+                return new ArticleViewHolder(view);
+
+            case R.layout.card_twitter:
+                return new TwitterViewHolder(view);
 
             default:
                 return new DefaultViewHolder(view);
@@ -111,13 +128,13 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
         View view = holder.itemView;
 
-        final int x = recyclerView.getWidth() / 2;
-        final int y = recyclerView.getHeight();
-        final int radius = Math.max(recyclerView.getWidth(), recyclerView.getHeight()) / 2;
+        view.setTranslationX(recyclerView.getWidth());
 
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, x, y, 0, radius);
-        animator.setInterpolator(new AccelerateInterpolator());
-        animator.start();
+        view.animate()
+                .translationX(0)
+                .setDuration(500)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
 
         holder.setAnimateOnAttach(false);
     }

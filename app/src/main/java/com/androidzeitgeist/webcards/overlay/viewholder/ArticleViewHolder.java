@@ -1,7 +1,3 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 package com.androidzeitgeist.webcards.overlay.viewholder;
 
 import android.view.View;
@@ -13,19 +9,19 @@ import com.androidzeitgeist.webcards.model.WebCard;
 import com.squareup.picasso.Picasso;
 
 /**
- * Default view holder for generic websites without a specific type.
+ * Default view holder for article-like websites.
  */
-public class DefaultViewHolder extends WebCardViewHolder {
+public class ArticleViewHolder extends WebCardViewHolder {
     private TextView titleView;
     private TextView urlView;
-    private ImageView iconView;
+    private ImageView imageView;
 
-    public DefaultViewHolder(View itemView) {
+    public ArticleViewHolder(View itemView) {
         super(itemView);
 
         titleView = (TextView) itemView.findViewById(R.id.title);
         urlView = (TextView) itemView.findViewById(R.id.url);
-        iconView = (ImageView) itemView.findViewById(R.id.icon);
+        imageView = (ImageView) itemView.findViewById(R.id.image);
     }
 
     @Override
@@ -34,7 +30,7 @@ public class DefaultViewHolder extends WebCardViewHolder {
         urlView.setText(webCard.getUrl());
 
         Picasso.with(itemView.getContext())
-                .load(webCard.getIconUrl())
-                .into(iconView);
+                .load(webCard.getImageUrl())
+                .into(imageView);
     }
 }
