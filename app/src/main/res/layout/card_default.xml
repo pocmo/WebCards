@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:alpha="0.1"/>
+        android:alpha="0.2"/>
 
         <RelativeLayout
             android:id="@+id/content"
@@ -28,7 +28,7 @@
                 android:textSize="14sp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="4dp"
+                android:paddingTop="8dp"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:textStyle="bold"
