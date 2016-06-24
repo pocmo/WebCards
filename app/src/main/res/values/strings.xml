@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Web Cards</string>
+
+    <string name="toast_missing_permission">Please enable permission to draw over other apps.</string>
 </resources>

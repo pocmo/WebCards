@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
@@ -74,7 +75,7 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
             windowManager.addView(this, layoutParams);
         } catch (final SecurityException | WindowManager.BadTokenException e) {
             // We do not have the permission to add a view to the window ("draw over other apps")
-            return;
+            Toast.makeText(getContext(), R.string.toast_missing_permission, Toast.LENGTH_SHORT).show();
         }
     }
 
