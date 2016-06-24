@@ -4,6 +4,7 @@
 
 package com.androidzeitgeist.webcards.overlay;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +106,10 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
 
     @Override
     public WebCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        CardView view = (CardView) inflater.inflate(R.layout.wrapper_card, parent, false);
+        inflater.inflate(viewType, view, true);
 
         switch (viewType) {
             case R.layout.card_placeholder:
