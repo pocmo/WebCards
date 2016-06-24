@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.util.UrlUtil;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -27,7 +28,7 @@ public class ArticleViewHolder extends WebCardViewHolder {
     @Override
     public void bind(WebCard webCard) {
         titleView.setText(webCard.getTitle());
-        urlView.setText(webCard.getUrl());
+        urlView.setText(UrlUtil.formatForDisplaying(webCard.getUrl()));
 
         Picasso.with(itemView.getContext())
                 .load(webCard.getImageUrl())

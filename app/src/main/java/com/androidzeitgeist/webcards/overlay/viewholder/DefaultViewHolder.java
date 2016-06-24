@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.util.UrlUtil;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -21,7 +22,6 @@ public class DefaultViewHolder extends WebCardViewHolder {
     private TextView urlView;
     private ImageView iconView;
     private ImageView backgroundView;
-    private TextView descriptionView;
 
     public DefaultViewHolder(View itemView) {
         super(itemView);
@@ -30,13 +30,12 @@ public class DefaultViewHolder extends WebCardViewHolder {
         urlView = (TextView) itemView.findViewById(R.id.url);
         iconView = (ImageView) itemView.findViewById(R.id.icon);
         backgroundView = (ImageView) itemView.findViewById(R.id.background);
-        descriptionView = (TextView) itemView.findViewById(R.id.description);
     }
 
     @Override
     public void bind(WebCard webCard) {
         titleView.setText(webCard.getTitle());
-        urlView.setText(webCard.getUrl());
+        urlView.setText(UrlUtil.formatForDisplaying(webCard.getUrl()));
 
         Picasso.with(itemView.getContext())
                 .load(webCard.getIconUrl())
@@ -51,14 +50,6 @@ public class DefaultViewHolder extends WebCardViewHolder {
                     .into(backgroundView);
         } else {
             backgroundView.setVisibility(View.GONE);
-        }
-
-        final String description = webCard.getDescription();
-        if (TextUtils.isEmpty(description)) {
-            descriptionView.setText(description);
-            descriptionView.setVisibility(View.VISIBLE);
-        } else {
-            descriptionView.setVisibility(View.GONE);
         }
     }
 }

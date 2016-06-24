@@ -83,8 +83,7 @@ public class URLProcessor {
                 url);
 
         final WebsiteFeatures features = featurizer.featurize(document);
-
-
+        
         final WebCard card;
 
         if (TextUtils.isEmpty(features.getType()) && !TextUtils.isEmpty(features.getImageUrl())) {

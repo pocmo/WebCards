@@ -24,7 +24,7 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#ff000000"
+                android:textColor="@color/title"
                 android:textSize="14sp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
@@ -33,18 +33,6 @@
                 android:ellipsize="end"
                 android:textStyle="bold"
                 tools:text="Title goes here" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:maxLines="2"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="2dp"
-                android:textSize="12sp"
-                tools:text="This is a description" />
 
             <ImageView
                 android:id="@+id/icon"
@@ -62,13 +50,14 @@
                 android:ellipsize="end"
                 android:layout_toLeftOf="@id/icon"
                 android:maxLines="1"
-                android:textColor="#ff888888"
+                android:textColor="@color/url"
                 android:textSize="12sp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="2dp"
                 android:layout_alignParentBottom="true"
+                android:fontFamily="sans-serif-medium"
                 tools:text="http://www.example.org" />
 
         </RelativeLayout>

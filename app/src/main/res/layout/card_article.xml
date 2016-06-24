@@ -26,7 +26,7 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#ff000000"
+                android:textColor="@color/title"
                 android:textSize="14sp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
@@ -43,12 +43,13 @@
                 android:layout_below="@id/title"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="#ff888888"
+                android:textColor="@color/url"
                 android:textSize="12sp"
                 android:paddingEnd="8dp"
                 android:paddingStart="8dp"
                 android:paddingBottom="8dp"
                 android:paddingTop="2dp"
+                android:fontFamily="sans-serif-medium"
                 tools:text="http://www.example.org" />
 
         </LinearLayout>
