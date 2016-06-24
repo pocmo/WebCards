@@ -110,6 +110,8 @@ public class OverlayView extends FrameLayout {
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new WebCardLayoutManager(getContext(), this));
         recyclerView.setHasFixedSize(true);
