@@ -7,8 +7,12 @@ package com.androidzeitgeist.webcards.overlay;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -18,11 +22,12 @@ import android.widget.FrameLayout;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.util.ItemClickSupport;
 
 /**
  * Root layout for the overlay.
  */
-public class OverlayView extends FrameLayout {
+public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemClickListener {
     private WindowManager windowManager;
     private WebCardAdapter adapter;
 
@@ -115,10 +120,15 @@ public class OverlayView extends FrameLayout {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new WebCardLayoutManager(getContext(), this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new WebCardAnimator());
+        recyclerView.setItemAnimator(new WebCardAnimator(recyclerView));
 
         adapter = new WebCardAdapter(recyclerView);
         recyclerView.setAdapter(adapter);
+
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(this);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new WebCardTouchHelper(adapter));
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     public synchronized void addCard(WebCard card) {
@@ -127,5 +137,22 @@ public class OverlayView extends FrameLayout {
         }
 
         adapter.addCard(card);
+    }
+
+    @Override
+    public void onItemClicked(RecyclerView recyclerView, View view, int position) {
+        WebCard card = adapter.getCard(position);
+
+        Intent intent = new CustomTabsIntent.Builder().build().intent;
+        intent.setData(Uri.parse(card.getUrl()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        getContext().startActivity(intent);
+
+        adapter.removeCard(card);
+
+        if (adapter.getItemCount() == 0) {
+            animateHide();
+        }
     }
 }

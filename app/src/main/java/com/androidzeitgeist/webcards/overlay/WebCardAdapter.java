@@ -51,6 +51,22 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
         notifyItemInserted(cards.size() - 1);
     }
 
+    public WebCard getCard(int position) {
+        return cards.get(position);
+    }
+
+    public void removeCard(WebCard card) {
+        int position = cards.indexOf(card);
+        if (position != -1) {
+            removeCard(position);
+        }
+    }
+
+    public void removeCard(int position) {
+        cards.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public void removeCards() {
         cards.clear();
         notifyDataSetChanged();

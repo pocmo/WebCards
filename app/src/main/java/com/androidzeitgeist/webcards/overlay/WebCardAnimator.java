@@ -8,6 +8,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -15,6 +16,12 @@ import android.view.animation.AccelerateInterpolator;
  * Animator implementation for the overlay recyclerview.
  */
 public class WebCardAnimator extends DefaultItemAnimator {
+    private RecyclerView recyclerView;
+
+    public WebCardAnimator(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
+
     @Override
     public boolean animateAdd(final RecyclerView.ViewHolder holder) {
         final View view = holder.itemView;
@@ -25,6 +32,29 @@ public class WebCardAnimator extends DefaultItemAnimator {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         dispatchAnimationFinished(holder);
+                    }
+                })
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
+
+        return false;
+    }
+
+    @Override
+    public boolean animateRemove(final RecyclerView.ViewHolder holder) {
+        final View view = holder.itemView;
+
+        view.animate()
+                .translationX(recyclerView.getWidth())
+                .setDuration(200)
+                .alpha(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        dispatchAnimationFinished(holder);
+
+                        view.setAlpha(1);
+                        view.setTranslationX(0);
                     }
                 })
                 .setInterpolator(new AccelerateInterpolator())
