@@ -17,6 +17,7 @@ import com.androidzeitgeist.webcards.processing.post.InstagramPhotoPostProcessor
 import com.androidzeitgeist.webcards.processing.post.PostProcessor;
 import com.androidzeitgeist.webcards.processing.post.TwitterPostProcessor;
 import com.androidzeitgeist.webcards.processing.post.VideoPostProcessor;
+import com.androidzeitgeist.webcards.processing.pre.GooglePlusPreProcessor;
 import com.androidzeitgeist.webcards.processing.pre.PreProcessor;
 
 import org.jsoup.Jsoup;
@@ -81,7 +82,9 @@ public class ContentProcessor {
     private ExecutorService service;
     private Featurizer featurizer;
 
-    private List<PreProcessor> preProcessors = Collections.emptyList();
+    private List<PreProcessor> preProcessors = Collections.singletonList(
+            (PreProcessor) new GooglePlusPreProcessor()
+    );
 
     private List<PostProcessor> postProcessors = Arrays.asList(
             new DefaultPostProcessor(),
@@ -107,10 +110,10 @@ public class ContentProcessor {
     }
 
     private void processInternal(String url, final ProcessorCallback callback) {
-        final Request request = buildRequest(url);
+        Request request = buildRequest(url);
 
         for (final PreProcessor processor : preProcessors) {
-            processor.process(request);
+            request = processor.process(request);
         }
 
         final Document document = executeAndParse(request);

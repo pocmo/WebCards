@@ -10,5 +10,5 @@ import okhttp3.Request;
  * Processor that can modify a request before it is executed.
  */
 public interface PreProcessor {
-    void process(Request request);
+    Request process(Request request);
 }
