@@ -42,7 +42,7 @@ public class DefaultViewHolder extends WebCardViewHolder {
                 .into(iconView);
 
         final String imageUrl = webCard.getImageUrl();
-        if (imageUrl != null) {
+        if (!TextUtils.isEmpty(imageUrl)) {
             backgroundView.setVisibility(View.VISIBLE);
 
             Picasso.with(itemView.getContext())
