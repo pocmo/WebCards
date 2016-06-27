@@ -6,7 +6,6 @@ package com.androidzeitgeist.webcards.processing;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.androidzeitgeist.featurizer.Featurizer;
@@ -41,7 +40,7 @@ import okhttp3.ResponseBody;
  * then provide this to a callback.
  */
 public class ContentProcessor {
-    private static final String TAG = "WebCards/URLProcessor";
+    private static final String TAG = "WebCards/Processor";
 
     public interface ProcessorCallback {
         void onWebCardCreated(WebCard card);
@@ -126,7 +125,7 @@ public class ContentProcessor {
             return;
         }
 
-        Log.d(TAG, "Received document and features with type: " + features.getType());
+        Log.d(TAG, "Received document and features (type=" + features.getType() + ", url=" + url + ")");
 
         for (final PostProcessor processor : postProcessors) {
             processor.process(document, features, callback);

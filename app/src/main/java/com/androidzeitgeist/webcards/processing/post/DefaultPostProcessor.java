@@ -32,6 +32,10 @@ public class DefaultPostProcessor implements PostProcessor {
             card = WebCard.createDefaultCardFromFeatures(features);
         }
 
-        callback.onWebCardCreated(card);
+        if (card != null) {
+            callback.onWebCardCreated(card);
+        } else {
+            callback.onWebCardFailed(document.baseUri());
+        }
     }
 }
