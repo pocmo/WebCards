@@ -7,17 +7,15 @@ package com.androidzeitgeist.webcards.overlay;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.IBinder;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
-import com.androidzeitgeist.webcards.processing.URLProcessor;
+import com.androidzeitgeist.webcards.processing.ContentProcessor;
 
-public class OverlayService extends Service {
+public class OverlayService extends Service implements ContentProcessor.ProcessorCallback {
     private static final String TAG = "WebCards/OverlayService";
 
     private static final String EXTRA_URL = "url";
@@ -31,14 +29,14 @@ public class OverlayService extends Service {
     }
 
     private WindowManager windowManager;
-    private URLProcessor processor;
+    private ContentProcessor contentProcessor;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         this.windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        this.processor = new URLProcessor();
+        this.contentProcessor = new ContentProcessor();
 
         initializeOverlay();
     }
@@ -84,16 +82,16 @@ public class OverlayService extends Service {
     private void process(String url) {
         overlayView.addCard(WebCard.createPlaceholder(url));
 
-        processor.process(url, new URLProcessor.Callback() {
-            @Override
-            public void onWebCardCreated(WebCard card) {
-                overlayView.addCard(card);
-            }
+        contentProcessor.process(url, new ContentProcessor.MainThreadProcessorCallback(this));
+    }
 
-            @Override
-            public void onWebCardFailed(String url) {
-                overlayView.addCard(WebCard.createError(url));
-            }
-        });
+    @Override
+    public void onWebCardCreated(WebCard card) {
+        overlayView.addCard(card);
+    }
+
+    @Override
+    public void onWebCardFailed(String url) {
+        overlayView.addCard(WebCard.createError(url));
     }
 }
