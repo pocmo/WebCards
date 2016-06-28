@@ -36,6 +36,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".viewer.PhotoActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <service
             android:name=".overlay.OverlayService"
             android:exported="false" />

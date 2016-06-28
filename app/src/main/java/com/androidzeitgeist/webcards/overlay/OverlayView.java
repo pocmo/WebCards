@@ -118,14 +118,8 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
     public void onItemClicked(RecyclerView recyclerView, View view, int position) {
         WebCard card = adapter.getCard(position);
 
-        Intent intent = new CustomTabsIntent.Builder().build().intent;
-        intent.setData(Uri.parse(card.getUrl()));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
-        getContext().startActivity(intent);
+        OverlayController.get().onCardClicked(card);
 
         adapter.removeCard(card);
-
-        OverlayController.get().closeOverlay();
     }
 }

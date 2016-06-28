@@ -6,9 +6,16 @@ package com.androidzeitgeist.webcards.overlay;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 
+import com.androidzeitgeist.webcards.model.CardType;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
+import com.androidzeitgeist.webcards.viewer.PhotoActivity;
+
+import static java.security.AccessController.getContext;
 
 /* package-private */ class OverlayController implements ContentProcessor.ProcessorCallback {
     private static OverlayController instance;
@@ -66,5 +73,19 @@ import com.androidzeitgeist.webcards.processing.ContentProcessor;
     @Override
     public void onWebCardFailed(String url) {
         overlayView.addCard(WebCard.createError(url));
+    }
+
+    public void onCardClicked(WebCard card) {
+        if (card.getType() == CardType.PHOTO) {
+            PhotoActivity.show(overlayService, card.getUrl());
+        } else {
+            Intent intent = new CustomTabsIntent.Builder().build().intent;
+            intent.setData(Uri.parse(card.getUrl()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setPackage("com.android.chrome");
+            overlayService.startActivity(intent);
+        }
+
+        OverlayController.get().closeOverlay();
     }
 }
