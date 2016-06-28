@@ -9,9 +9,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -62,7 +64,7 @@ import com.androidzeitgeist.webcards.R;
         };
     }
 
-    public int getMinOffsetX() {
+    /* package-private */ int getMinOffsetX() {
         return minOffsetX;
     }
 
@@ -77,7 +79,7 @@ import com.androidzeitgeist.webcards.R;
         canvas.drawLines(points, strokePaint);
     }
 
-    public void addToRoot() {
+    /* package-private */ void addToRoot() {
         setVisibility(View.VISIBLE);
 
         if (isShown()) {
@@ -92,7 +94,8 @@ import com.androidzeitgeist.webcards.R;
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
+                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
 
         layoutParams.gravity = Gravity.BOTTOM | Gravity.END;
@@ -106,7 +109,7 @@ import com.androidzeitgeist.webcards.R;
         }
     }
 
-    public synchronized void removeFromRoot() {
+    /* package-private */ synchronized void removeFromRoot() {
         if (!isShown()) {
             return;
         }

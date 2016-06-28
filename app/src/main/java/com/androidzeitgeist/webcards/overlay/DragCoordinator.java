@@ -59,6 +59,7 @@ import android.view.animation.AccelerateInterpolator;
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             openOrClose();
+            return true;
         }
 
         return false;
