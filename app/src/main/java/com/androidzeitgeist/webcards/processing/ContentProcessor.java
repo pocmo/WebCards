@@ -142,9 +142,11 @@ public class ContentProcessor {
     }
 
     private Document executeAndParse(Request request) {
+        ResponseBody body = null;
+
         try {
             final Response response = client.newCall(request).execute();
-            final ResponseBody body = response.body();
+            body = response.body();
 
             return Jsoup.parse(
                     body.byteStream(),
@@ -153,6 +155,10 @@ public class ContentProcessor {
         } catch (IOException e) {
             Log.d(TAG, "IOException while performing request and parsing document", e);
             return null;
+        } finally {
+            if (body != null) {
+                body.close();
+            }
         }
     }
 }
