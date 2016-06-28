@@ -4,8 +4,6 @@
 
 package com.androidzeitgeist.webcards.processing.post;
 
-import android.text.TextUtils;
-
 import com.androidzeitgeist.featurizer.features.WebsiteFeatures;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
@@ -22,10 +20,7 @@ public class DefaultPostProcessor implements PostProcessor {
     public void process(Document document, WebsiteFeatures features, ContentProcessor.ProcessorCallback callback) {
         final WebCard card;
 
-        if (TextUtils.isEmpty(features.getType()) && !TextUtils.isEmpty(features.getImageUrl())) {
-            // The website does not have an open graph type but a good image: Use article card.
-            card = WebCard.createArticleCard(features);
-        } else if (OPEN_GRAPH_TYPE_ARTICLE.equals(features.getType())) {
+        if (OPEN_GRAPH_TYPE_ARTICLE.equals(features.getType())) {
             // This website actual has an article open graph type: Use the article card.
             card = WebCard.createArticleCard(features);
         } else {

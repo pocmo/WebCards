@@ -19,6 +19,7 @@ import com.androidzeitgeist.webcards.overlay.viewholder.DefaultViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.ErrorViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.PhotoViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.PlaceholderViewHolder;
+import com.androidzeitgeist.webcards.overlay.viewholder.ProductViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.TwitterViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.VideoViewHolder;
 import com.androidzeitgeist.webcards.overlay.viewholder.WebCardViewHolder;
@@ -103,6 +104,9 @@ import java.util.List;
             case PHOTO:
                 return R.layout.card_photo;
 
+            case PRODUCT:
+                return R.layout.card_product;
+
             default:
                 return R.layout.card_default;
         }
@@ -133,6 +137,9 @@ import java.util.List;
 
             case R.layout.card_photo:
                 return new PhotoViewHolder(view);
+
+            case R.layout.card_product:
+                return new ProductViewHolder(view);
 
             default:
                 return new DefaultViewHolder(view);

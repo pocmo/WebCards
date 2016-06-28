@@ -68,6 +68,19 @@ public class WebCard {
         return card;
     }
 
+    public static WebCard createProductCard(String productTitle, String productUrl, String productPhotoUrl, String price) {
+        ProductWebCard card = new ProductWebCard();
+
+        card.title = productTitle;
+        card.imageUrl = productPhotoUrl;
+        card.type = CardType.PRODUCT;
+        card.price = price;
+        card.url = productUrl;
+
+
+        return card;
+    }
+
     public static WebCard createDefaultCardFromFeatures(WebsiteFeatures features) {
         if (TextUtils.isEmpty(features.getTitle())
                 || TextUtils.isEmpty(features.getUrl())
@@ -89,12 +102,12 @@ public class WebCard {
         return card;
     }
 
-    private String title;
-    private String url;
-    private String iconUrl;
-    private String imageUrl;
-    private CardType type;
-    private String description;
+    protected String title;
+    protected String url;
+    protected String iconUrl;
+    protected String imageUrl;
+    protected CardType type;
+    protected String description;
 
     public String getTitle() {
         return title;

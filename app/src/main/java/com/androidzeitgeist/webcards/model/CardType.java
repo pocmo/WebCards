@@ -15,5 +15,6 @@ public enum CardType {
     ARTICLE,
     TWITTER,
     VIDEO,
-    PHOTO
+    PHOTO,
+    PRODUCT
 }

@@ -11,6 +11,7 @@ import android.util.Log;
 import com.androidzeitgeist.featurizer.Featurizer;
 import com.androidzeitgeist.featurizer.features.WebsiteFeatures;
 import com.androidzeitgeist.webcards.model.WebCard;
+import com.androidzeitgeist.webcards.processing.post.AmazonPostProcessor;
 import com.androidzeitgeist.webcards.processing.post.DefaultPostProcessor;
 import com.androidzeitgeist.webcards.processing.post.FlickrPhotoPostProcessor;
 import com.androidzeitgeist.webcards.processing.post.InstagramPhotoPostProcessor;
@@ -91,7 +92,8 @@ public class ContentProcessor {
             new VideoPostProcessor(),
             new InstagramPhotoPostProcessor(),
             new FlickrPhotoPostProcessor(),
-            new TwitterPostProcessor()
+            new TwitterPostProcessor(),
+            new AmazonPostProcessor()
     );
 
     public ContentProcessor() {
