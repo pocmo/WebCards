@@ -4,8 +4,6 @@
 
 package com.androidzeitgeist.webcards.overlay;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -17,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -31,8 +28,6 @@ import com.androidzeitgeist.webcards.util.ItemClickSupport;
 public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemClickListener {
     private WindowManager windowManager;
     private WebCardAdapter adapter;
-
-    private boolean isAnimating;
 
     public OverlayView(Context context) {
         super(context);
@@ -53,7 +48,7 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
-    public synchronized void show() {
+    /* package-private */ synchronized void addToRoot() {
         setVisibility(View.VISIBLE);
 
         if (isShown()) {
@@ -66,10 +61,11 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                         WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
 
-        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        layoutParams.gravity = Gravity.BOTTOM | Gravity.END;
 
         try {
             windowManager.addView(this, layoutParams);
@@ -79,7 +75,7 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         }
     }
 
-    private synchronized void hide() {
+    /* package-private */ synchronized void removeFromRoot() {
         if (!isShown()) {
             return;
         }
@@ -87,39 +83,12 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         windowManager.removeView(this);
     }
 
-    public synchronized void animateHide() {
-        if (isAnimating) {
-            return;
-        }
-
-        animate()
-                .translationX(getWidth())
-                .setDuration(300)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        setVisibility(View.INVISIBLE);
-                        setTranslationX(0);
-
-                        adapter.removeCards();
-
-                        hide();
-
-                        isAnimating = false;
-                    }
-                })
-                .setInterpolator(new AccelerateInterpolator())
-                .start();
-
-        isAnimating = true;
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new WebCardLayoutManager(getContext(), this));
+        recyclerView.setLayoutManager(new WebCardLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new WebCardAnimator(recyclerView));
 
@@ -132,12 +101,16 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public synchronized void addCard(WebCard card) {
+    /* package-private */ synchronized void addCard(WebCard card) {
         if (!isShown()) {
-            show();
+            addToRoot();
         }
 
         adapter.addCard(card);
+    }
+
+    /* package-private */ synchronized void removeCards() {
+        adapter.removeCards();
     }
 
     @Override
@@ -152,8 +125,6 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
 
         adapter.removeCard(card);
 
-        if (adapter.getItemCount() == 0) {
-            animateHide();
-        }
+        OverlayController.get().closeOverlay();
     }
 }

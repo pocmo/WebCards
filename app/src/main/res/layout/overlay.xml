@@ -10,9 +10,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_gravity="end"
         android:layout_width="164dp"
         android:layout_height="match_parent"
-        android:background="#66666666"/>
+        android:paddingTop="12dp"
+        android:background="#66666666"
+        android:layout_gravity="end" />
 
 </com.androidzeitgeist.webcards.overlay.OverlayView>

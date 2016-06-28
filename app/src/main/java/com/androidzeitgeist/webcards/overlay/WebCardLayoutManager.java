@@ -9,28 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Layout manager implementation for the overlay recyclerview.
+ * Layout manager implementation for the overlay recycler view.
  */
-public class WebCardLayoutManager extends LinearLayoutManager {
-    private OverlayView overlayView;
-
-    public WebCardLayoutManager(Context context, OverlayView overlayView) {
+/* package-private */ class WebCardLayoutManager extends LinearLayoutManager {
+    /* package-private */ WebCardLayoutManager(Context context) {
         super(context);
 
         setReverseLayout(true);
-
-        this.overlayView = overlayView;
-    }
-
-    @Override
-    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-        final int scrollRange = super.scrollVerticallyBy(dy, recycler, state);
-        final int overscroll = dy - scrollRange;
-
-        if (overscroll < -20) {
-            overlayView.animateHide();
-        }
-
-        return scrollRange;
     }
 }

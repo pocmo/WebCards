@@ -7,10 +7,10 @@ package com.androidzeitgeist.webcards.overlay;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-public class WebCardTouchHelper extends ItemTouchHelper.Callback {
+/* package-private */ class WebCardTouchHelper extends ItemTouchHelper.Callback {
     private WebCardAdapter adapter;
 
-    public WebCardTouchHelper(WebCardAdapter adapter) {
+    /* package-private */ WebCardTouchHelper(WebCardAdapter adapter) {
         this.adapter = adapter;
     }
 

@@ -9,18 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
 
-public class OverlayService extends Service implements ContentProcessor.ProcessorCallback {
+public class OverlayService extends Service {
     private static final String TAG = "WebCards/OverlayService";
 
     private static final String EXTRA_URL = "url";
 
     private OverlayView overlayView;
+    private HandleView handleView;
 
     public static void processUrl(Context context, String url) {
         Intent intent = new Intent(context, OverlayService.class);
@@ -28,14 +28,14 @@ public class OverlayService extends Service implements ContentProcessor.Processo
         context.startService(intent);
     }
 
-    private WindowManager windowManager;
     private ContentProcessor contentProcessor;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        this.windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        OverlayController.get().setOverlayService(this);
+
         this.contentProcessor = new ContentProcessor();
 
         initializeOverlay();
@@ -49,9 +49,13 @@ public class OverlayService extends Service implements ContentProcessor.Processo
     private void initializeOverlay() {
         if (overlayView == null) {
             overlayView = (OverlayView) LayoutInflater.from(this).inflate(R.layout.overlay, null);
+            handleView = new HandleView(this);
+
+            OverlayController.get().setViews(overlayView, handleView);
         }
 
-        overlayView.show();
+        overlayView.addToRoot();
+        handleView.addToRoot();
     }
 
     @Override
@@ -70,6 +74,10 @@ public class OverlayService extends Service implements ContentProcessor.Processo
             return START_NOT_STICKY;
         }
 
+        overlayView.removeCards();
+
+        OverlayController.get().openOverlay();
+
         process(url);
 
         // For now we just start as not sticky. If the process dies later then the intent is not
@@ -82,16 +90,6 @@ public class OverlayService extends Service implements ContentProcessor.Processo
     private void process(String url) {
         overlayView.addCard(WebCard.createPlaceholder(url));
 
-        contentProcessor.process(url, new ContentProcessor.MainThreadProcessorCallback(this));
-    }
-
-    @Override
-    public void onWebCardCreated(WebCard card) {
-        overlayView.addCard(card);
-    }
-
-    @Override
-    public void onWebCardFailed(String url) {
-        overlayView.addCard(WebCard.createError(url));
+        contentProcessor.process(url, new ContentProcessor.MainThreadProcessorCallback(OverlayController.get()));
     }
 }

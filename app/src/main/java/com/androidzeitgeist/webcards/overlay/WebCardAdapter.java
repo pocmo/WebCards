@@ -29,18 +29,18 @@ import java.util.List;
 /**
  * WebCard adapter for the overlay.
  */
-public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
+/* package-private */ class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
     private final RecyclerView recyclerView;
     private final List<WebCard> cards;
 
     private int lastAnimatedPosition = -1;
 
-    public WebCardAdapter(RecyclerView recyclerView) {
+    /* package-private */ WebCardAdapter(RecyclerView recyclerView) {
         this.cards = new ArrayList<>();
         this.recyclerView = recyclerView;
     }
 
-    public void addCard(WebCard card) {
+    /* package-private */ void addCard(WebCard card) {
         if (cards.size() == 1) {
             if (cards.get(0).getType() == CardType.PLACEHOLDER) {
                 cards.set(0, card);
@@ -53,23 +53,27 @@ public class WebCardAdapter extends RecyclerView.Adapter<WebCardViewHolder> {
         notifyItemInserted(cards.size() - 1);
     }
 
-    public WebCard getCard(int position) {
+    /* package-private */ WebCard getCard(int position) {
         return cards.get(position);
     }
 
-    public void removeCard(WebCard card) {
+    /* package-private */ void removeCard(WebCard card) {
         int position = cards.indexOf(card);
         if (position != -1) {
             removeCard(position);
         }
     }
 
-    public void removeCard(int position) {
+    /* package-private */ void removeCard(int position) {
         cards.remove(position);
         notifyItemRemoved(position);
+
+        if (cards.size() == 0) {
+            OverlayController.get().onOverlayEmpty();
+        }
     }
 
-    public void removeCards() {
+    /* package-private */ void removeCards() {
         cards.clear();
         notifyDataSetChanged();
 
