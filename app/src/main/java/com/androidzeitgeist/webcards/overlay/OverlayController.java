@@ -14,8 +14,7 @@ import com.androidzeitgeist.webcards.model.CardType;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
 import com.androidzeitgeist.webcards.viewer.PhotoActivity;
-
-import static java.security.AccessController.getContext;
+import com.androidzeitgeist.webcards.viewer.VideoActivity;
 
 /* package-private */ class OverlayController implements ContentProcessor.ProcessorCallback {
     private static OverlayController instance;
@@ -75,9 +74,11 @@ import static java.security.AccessController.getContext;
         overlayView.addCard(WebCard.createError(url));
     }
 
-    public void onCardClicked(WebCard card) {
+    /* package-private */  void onCardClicked(WebCard card) {
         if (card.getType() == CardType.PHOTO) {
             PhotoActivity.show(overlayService, card.getUrl());
+        } else if (card.getType() == CardType.VIDEO) {
+            VideoActivity.show(overlayService, card.getUrl());
         } else {
             Intent intent = new CustomTabsIntent.Builder().build().intent;
             intent.setData(Uri.parse(card.getUrl()));

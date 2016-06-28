@@ -39,6 +39,10 @@
         <activity android:name=".viewer.PhotoActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <activity android:name=".viewer.VideoActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboard|keyboardHidden|mcc|mnc|orientation|screenSize|locale|layoutDirection|smallestScreenSize|screenLayout"/>
+
         <service
             android:name=".overlay.OverlayService"
             android:exported="false" />
