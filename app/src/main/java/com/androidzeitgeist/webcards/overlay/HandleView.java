@@ -98,7 +98,7 @@ import com.androidzeitgeist.webcards.R;
                         WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 PixelFormat.TRANSLUCENT);
 
-        layoutParams.gravity = Gravity.BOTTOM | Gravity.END;
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.END;
         layoutParams.x = minOffsetX;
 
         try {

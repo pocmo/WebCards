@@ -53,7 +53,7 @@ import android.view.animation.AccelerateInterpolator;
 
             int positionX = Math.min(windowWidth - handleView.getWidth() - x, handleView.getMinOffsetX());
 
-            updatePosition(positionX, y);
+            updateHandlePosition(positionX, y);
             updateOverlayViewPosition(positionX);
 
             return true;
@@ -126,10 +126,10 @@ import android.view.animation.AccelerateInterpolator;
         updateOverlayViewPosition(x);
     }
 
-    private void updatePosition(int x, int y) {
+    private void updateHandlePosition(int x, int y) {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        layoutParams.y = windowHeight - handleView.getHeight() - y;
+        layoutParams.y = y - (windowHeight / 2) + (handleView.getHeight() / 2);
         layoutParams.x = x;
 
         windowManager.updateViewLayout(handleView, layoutParams);
