@@ -8,23 +8,28 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 
+import com.androidzeitgeist.webcards.R;
+
 /**
  * Helper class for dragging the handle and coordinating the drag/animation state between handle
  * and overlay.
  */
 /* package-private */ class DragCoordinator implements View.OnTouchListener {
-    private WindowManager windowManager;
-    private OverlayView overlayView;
-    private HandleView handleView;
+    private final WindowManager windowManager;
+    private final OverlayView overlayView;
+    private final HandleView handleView;
 
-    private int windowHeight;
-    private int windowWidth;
+    private final int handleVertialDragOffset;
+    private final int windowHeight;
+    private final int windowWidth;
+
     private boolean isOpen;
 
     /* package-private */ DragCoordinator(Context context, OverlayView overlayView, HandleView handleView) {
@@ -35,10 +40,13 @@ import android.view.animation.AccelerateInterpolator;
 
         handleView.setOnTouchListener(this);
 
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        final Resources resources = context.getResources();
+        final DisplayMetrics displayMetrics = resources.getDisplayMetrics();
 
         windowWidth = displayMetrics.widthPixels;
         windowHeight = displayMetrics.heightPixels;
+
+        handleVertialDragOffset = (int) resources.getDimension(R.dimen.handle_vertical_drag_offset);
     }
 
     @Override
@@ -129,8 +137,11 @@ import android.view.animation.AccelerateInterpolator;
     private void updateHandlePosition(int x, int y) {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        layoutParams.y = y - (windowHeight / 2) + (handleView.getHeight() / 2);
         layoutParams.x = x;
+
+        if (x <= handleVertialDragOffset) {
+            layoutParams.y = y - (windowHeight / 2) + (handleView.getHeight() / 2);
+        }
 
         windowManager.updateViewLayout(handleView, layoutParams);
     }
