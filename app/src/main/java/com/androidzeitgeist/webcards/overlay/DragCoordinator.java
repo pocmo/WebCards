@@ -10,6 +10,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -66,14 +67,25 @@ import com.androidzeitgeist.webcards.R;
 
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            openOrClose();
+            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
+            final int y = layoutParams.y;
+
+            final int center = windowHeight / 2;
+            final int position = y + center - (handleView.getHeight() / 2);
+
+            if (position >= windowHeight - (handleView.getHeight() * 2)) {
+                OverlayController.get().removeOverlay();
+            } else {
+                openOrCloseIfNeeded();
+            }
+
             return true;
         }
 
         return false;
     }
 
-    private void openOrClose() {
+    private void openOrCloseIfNeeded() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
         if (layoutParams.x < handleView.getMinOffsetX() / 2) {

@@ -45,11 +45,15 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
         dragCoordinator.animateClose().addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                overlayView.removeFromRoot();
-                handleView.removeFromRoot();
-                overlayService.stopSelf();
+                removeOverlay();
             }
         });
+    }
+
+    /* package-private */ void removeOverlay() {
+        overlayView.removeFromRoot();
+        handleView.removeFromRoot();
+        overlayService.stopSelf();
     }
 
     /* package-private */ void closeOverlay() {
