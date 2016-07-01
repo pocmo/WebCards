@@ -28,7 +28,6 @@ import com.androidzeitgeist.webcards.R;
     private final HandleView handleView;
     private final DismissAreaView dismissAreaView;
 
-    private final int handleVertialDragOffset;
     private final int windowHeight;
     private final int windowWidth;
 
@@ -49,17 +48,17 @@ import com.androidzeitgeist.webcards.R;
 
         windowWidth = displayMetrics.widthPixels;
         windowHeight = displayMetrics.heightPixels;
-
-        handleVertialDragOffset = (int) resources.getDimension(R.dimen.handle_vertical_drag_offset);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            dismissAreaView.setVisibility(View.VISIBLE);
+            if (!isOpen) {
+                dismissAreaView.setVisibility(View.VISIBLE);
+            }
         }
 
-        if (isHoveringOverDismissArea != calculateIfHoveringOverDismissArea(event)) {
+        if (isHoveringOverDismissArea != isHoveringOverDismissArea()) {
             isHoveringOverDismissArea = !isHoveringOverDismissArea;
 
             handleView.setVisibility(isHoveringOverDismissArea ? View.INVISIBLE : View.VISIBLE);
@@ -74,10 +73,15 @@ import com.androidzeitgeist.webcards.R;
             int x = (int) event.getRawX() - xOffset;
             int y = (int) event.getRawY() - yOffset;
 
-            int positionX = Math.min(windowWidth - handleView.getWidth() - x, handleView.getMinOffsetX());
+            int translatedX = Math.min(windowWidth - handleView.getWidth() - x, handleView.getMinOffsetX());
+            int translatedY = y - (windowHeight / 2) + (handleView.getHeight() / 2);
 
-            updateHandlePosition(positionX, y);
-            updateOverlayViewPosition(positionX);
+            if (isOpen) {
+                updateHandlePosition(translatedX, getHandleY());
+                updateOverlayViewPosition(translatedX);
+            } else {
+                updateHandlePosition(getHandleX(), translatedY);
+            }
 
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -96,7 +100,17 @@ import com.androidzeitgeist.webcards.R;
         return false;
     }
 
-    private boolean calculateIfHoveringOverDismissArea(MotionEvent event) {
+    private int getHandleX() {
+        final WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
+        return layoutParams.x;
+    }
+
+    private int getHandleY() {
+        final WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
+        return layoutParams.y;
+    }
+
+    private boolean isHoveringOverDismissArea() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
         final int y = layoutParams.y;
 
@@ -171,10 +185,7 @@ import com.androidzeitgeist.webcards.R;
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
         layoutParams.x = x;
-
-        if (x <= handleVertialDragOffset) {
-            layoutParams.y = y - (windowHeight / 2) + (handleView.getHeight() / 2);
-        }
+        layoutParams.y = y;
 
         windowManager.updateViewLayout(handleView, layoutParams);
     }
