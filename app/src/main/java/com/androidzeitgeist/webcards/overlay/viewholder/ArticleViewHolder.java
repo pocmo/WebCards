@@ -1,5 +1,6 @@
 package com.androidzeitgeist.webcards.overlay.viewholder;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class ArticleViewHolder extends WebCardViewHolder {
 
         Picasso.with(itemView.getContext())
                 .load(webCard.getImageUrl())
+                .placeholder(R.drawable.article_fallback_image)
+                .error(R.drawable.article_fallback_image)
                 .into(imageView);
     }
 }
