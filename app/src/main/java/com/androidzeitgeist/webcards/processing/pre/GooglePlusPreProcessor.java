@@ -13,18 +13,20 @@ import okhttp3.Request;
  * the redirector URL and create a new request.
  */
 public class GooglePlusPreProcessor implements PreProcessor {
-    private static final String URL_PREFIX = "https://plus.url.google.com/url?q=";
+    private static final String URL_PREFIX = "://plus.url.google.com/url?q=";
 
     @Override
     public Request process(Request request) {
         final String url = request.url().toString();
 
-        if (url.startsWith(URL_PREFIX)) {
+        if (url.contains(URL_PREFIX)) {
             final String actualUrl = Uri.parse(url).getQueryParameter("q");
 
-            return request.newBuilder()
-                    .url(actualUrl)
-                    .build();
+            if (actualUrl != null) {
+                return request.newBuilder()
+                        .url(actualUrl)
+                        .build();
+            }
         }
 
         return request;
