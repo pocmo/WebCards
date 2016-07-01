@@ -8,6 +8,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -90,8 +91,12 @@ import android.view.animation.AccelerateInterpolator;
             dismissAreaView.setVisibility(View.GONE);
             handleView.setVisibility(View.VISIBLE);
 
-            if (couldBeATap(event) && !isOpen) {
-                animateOpen();
+            if (couldBeATap(event)) {
+                if (isOpen) {
+                    OverlayController.get().switchToApp();
+                } else {
+                    animateOpen();
+                }
             } else if (isHoveringOverDismissArea) {
                 OverlayController.get().removeOverlay();
             } else {

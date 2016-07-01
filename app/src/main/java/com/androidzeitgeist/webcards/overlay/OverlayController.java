@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 
+import com.androidzeitgeist.webcards.MainActivity;
 import com.androidzeitgeist.webcards.model.CardType;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
@@ -98,5 +99,18 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
         }
 
         OverlayController.get().closeOverlay();
+    }
+
+    /* package-private */ void switchToApp() {
+        dragCoordinator.animateClose().addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Intent intent = new Intent(overlayService, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                overlayService.startActivity(intent);
+
+                removeOverlay();
+            }
+        });
     }
 }
