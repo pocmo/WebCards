@@ -1,57 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_toLeftOf="@id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:layout_alignParentRight="true"
-                android:background="#ffeeeeee" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#aaffffff"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingBottom="4dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:textColor="@color/title"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Title goes here\nand here!" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/title"
-                android:textSize="14sp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="4dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textStyle="bold"
-                tools:text="Title goes here" />
 
-            <TextView
-                android:id="@+id/url"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/url"
-                android:textSize="12sp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingBottom="8dp"
-                android:paddingTop="2dp"
-                android:fontFamily="sans-serif-medium"
-                tools:text="http://www.example.org" />
-
-        </LinearLayout>
+    <TextView
+        android:id="@+id/url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="#33000000"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:padding="4dp"
+        android:textColor="#dddddd"
+        android:textSize="10sp"
+        tools:text="http://www.example.org" />
 
 </merge>
