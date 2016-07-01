@@ -22,6 +22,8 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
     private OverlayService overlayService;
     private OverlayView overlayView;
     private HandleView handleView;
+    private DismissAreaView dismissAreaView;
+
     private DragCoordinator dragCoordinator;
 
     /* package-private */ static synchronized OverlayController get() {
@@ -35,10 +37,12 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
         this.overlayService = overlayService;
     }
 
-    /* package-private */ void setViews(OverlayView overlayView, HandleView handleView) {
+    /* package-private */ void setViews(OverlayView overlayView, HandleView handleView, DismissAreaView dismissAreaView) {
         this.overlayView = overlayView;
         this.handleView = handleView;
-        this.dragCoordinator = new DragCoordinator(overlayService, overlayView, handleView);
+        this.dismissAreaView = dismissAreaView;
+
+        this.dragCoordinator = new DragCoordinator(overlayService, overlayView, handleView, dismissAreaView);
     }
 
     /* package-private */ void onOverlayEmpty() {
@@ -53,6 +57,8 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
     /* package-private */ void removeOverlay() {
         overlayView.removeFromRoot();
         handleView.removeFromRoot();
+        dismissAreaView.removeFromRoot();
+
         overlayService.stopSelf();
     }
 

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="dismiss_indicator_highlight">#ff4edba6</color>
+
     <color name="title">#363B40</color>
     <color name="url">#777777</color>
 </resources>

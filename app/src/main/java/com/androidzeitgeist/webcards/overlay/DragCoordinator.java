@@ -26,16 +26,19 @@ import com.androidzeitgeist.webcards.R;
     private final WindowManager windowManager;
     private final OverlayView overlayView;
     private final HandleView handleView;
+    private final DismissAreaView dismissAreaView;
 
     private final int handleVertialDragOffset;
     private final int windowHeight;
     private final int windowWidth;
 
+    private boolean isHoveringOverDismissArea;
     private boolean isOpen;
 
-    /* package-private */ DragCoordinator(Context context, OverlayView overlayView, HandleView handleView) {
+    /* package-private */ DragCoordinator(Context context, OverlayView overlayView, HandleView handleView, DismissAreaView dismissAreaView) {
         this.overlayView = overlayView;
         this.handleView = handleView;
+        this.dismissAreaView = dismissAreaView;
 
         this.windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -52,6 +55,17 @@ import com.androidzeitgeist.webcards.R;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            dismissAreaView.setVisibility(View.VISIBLE);
+        }
+
+        if (isHoveringOverDismissArea != calculateIfHoveringOverDismissArea(event)) {
+            isHoveringOverDismissArea = !isHoveringOverDismissArea;
+
+            handleView.setVisibility(isHoveringOverDismissArea ? View.INVISIBLE : View.VISIBLE);
+            dismissAreaView.setHighlight(isHoveringOverDismissArea);
+        }
+
         if (event.getAction() == MotionEvent.ACTION_MOVE | event.getAction() == MotionEvent.ACTION_DOWN) {
             overlayView.setVisibility(View.VISIBLE);
 
@@ -67,13 +81,10 @@ import com.androidzeitgeist.webcards.R;
 
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
-            final int y = layoutParams.y;
+            dismissAreaView.setVisibility(View.GONE);
+            handleView.setVisibility(View.VISIBLE);
 
-            final int center = windowHeight / 2;
-            final int position = y + center - (handleView.getHeight() / 2);
-
-            if (position >= windowHeight - (handleView.getHeight() * 2)) {
+            if (isHoveringOverDismissArea) {
                 OverlayController.get().removeOverlay();
             } else {
                 openOrCloseIfNeeded();
@@ -83,6 +94,16 @@ import com.androidzeitgeist.webcards.R;
         }
 
         return false;
+    }
+
+    private boolean calculateIfHoveringOverDismissArea(MotionEvent event) {
+        WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
+        final int y = layoutParams.y;
+
+        final int center = windowHeight / 2;
+        final int position = y + center - (handleView.getHeight() / 2);
+
+        return position >= windowHeight - (handleView.getHeight() * 2);
     }
 
     private void openOrCloseIfNeeded() {

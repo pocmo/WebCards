@@ -1,3 +1,9 @@
 <resources>
     <dimen name="handle_vertical_drag_offset">10dp</dimen>
+
+    <dimen name="dismiss_area_size">150dp</dimen>
+    <dimen name="dismiss_rectangle_size">40dp</dimen>
+    <dimen name="dismiss_rectangle_margin">10dp</dimen>
+    <dimen name="dismiss_cross_size">20dp</dimen>
+    <dimen name="dismiss_indicator_stroke_width">2dp</dimen>
 </resources>

@@ -21,6 +21,7 @@ public class OverlayService extends Service {
 
     private OverlayView overlayView;
     private HandleView handleView;
+    private DismissAreaView dismissAreaView;
 
     public static void processUrl(Context context, String url) {
         Intent intent = new Intent(context, OverlayService.class);
@@ -50,12 +51,14 @@ public class OverlayService extends Service {
         if (overlayView == null) {
             overlayView = (OverlayView) LayoutInflater.from(this).inflate(R.layout.overlay, null);
             handleView = new HandleView(this);
+            dismissAreaView = new DismissAreaView(this);
 
-            OverlayController.get().setViews(overlayView, handleView);
+            OverlayController.get().setViews(overlayView, handleView, dismissAreaView);
         }
 
         overlayView.addToRoot();
         handleView.addToRoot();
+        dismissAreaView.addToRoot();
     }
 
     @Override
