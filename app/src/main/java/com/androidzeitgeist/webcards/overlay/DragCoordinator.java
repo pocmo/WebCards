@@ -8,7 +8,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -76,7 +75,7 @@ import android.view.animation.AccelerateInterpolator;
             int x = (int) event.getRawX() - xOffset;
             int y = (int) event.getRawY() - yOffset;
 
-            int translatedX = Math.min(windowWidth - handleView.getWidth() - x, handleView.getMinOffsetX());
+            int translatedX = Math.min(windowWidth - handleView.getWidth() - x, handleView.getOpenOffsetX());
             int translatedY = y - (windowHeight / 2) + (handleView.getHeight() / 2);
 
             if (isOpen) {
@@ -136,7 +135,7 @@ import android.view.animation.AccelerateInterpolator;
     private void openOrCloseIfNeeded() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        if (layoutParams.x < handleView.getMinOffsetX() / 2) {
+        if (layoutParams.x < handleView.getOpenOffsetX() / 2) {
             animateClose();
         } else {
             animateOpen();
@@ -167,7 +166,7 @@ import android.view.animation.AccelerateInterpolator;
     /* package-private */ void animateOpen() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, handleView.getMinOffsetX());
+        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, handleView.getOpenOffsetX());
         animator.setDuration(250);
         animator.setInterpolator(new AccelerateInterpolator());
 

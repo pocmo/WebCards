@@ -9,11 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -31,14 +29,14 @@ import com.androidzeitgeist.webcards.R;
     private Path path;
     private float[] points;
 
-    private int minOffsetX;
+    private int openOffsetX;
 
     public HandleView(Context context) {
         super(context);
 
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-        minOffsetX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 164, getResources().getDisplayMetrics());
+        openOffsetX = getResources ().getDimensionPixelSize(R.dimen.overlay_width);
 
         fillPaint = new Paint();
         fillPaint.setColor(0x66666666);
@@ -64,8 +62,8 @@ import com.androidzeitgeist.webcards.R;
         };
     }
 
-    /* package-private */ int getMinOffsetX() {
-        return minOffsetX;
+    /* package-private */ int getOpenOffsetX() {
+        return openOffsetX;
     }
 
     @Override
@@ -99,7 +97,7 @@ import com.androidzeitgeist.webcards.R;
                 PixelFormat.TRANSLUCENT);
 
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.END;
-        layoutParams.x = minOffsetX;
+        layoutParams.x = openOffsetX;
 
         try {
             windowManager.addView(this, layoutParams);

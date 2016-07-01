@@ -1,4 +1,6 @@
 <resources>
+    <dimen name="overlay_width">164dp</dimen>
+
     <dimen name="dismiss_area_size">150dp</dimen>
     <dimen name="dismiss_rectangle_size">40dp</dimen>
     <dimen name="dismiss_rectangle_margin">10dp</dimen>
