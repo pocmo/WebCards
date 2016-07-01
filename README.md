@@ -2,5 +2,3 @@
 
 # WebCards
 Cards. Cards everywhere.
-
-![](https://raw.githubusercontent.com/pocmo/WebCards/master/screenshots/animated_instagram.gif)
