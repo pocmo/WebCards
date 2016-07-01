@@ -5,13 +5,15 @@
 package com.androidzeitgeist.webcards.overlay;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.util.TypedValue;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -23,12 +25,12 @@ import com.androidzeitgeist.webcards.R;
 /* package-private */ class HandleView extends View {
     private WindowManager windowManager;
 
-    private Paint fillPaint;
-    private Paint strokePaint;
+    private Paint paint;
 
-    private Path path;
-    private float[] points;
+    private int centerX;
+    private int centerY;
 
+    private int margin;
     private int openOffsetX;
 
     public HandleView(Context context) {
@@ -36,30 +38,33 @@ import com.androidzeitgeist.webcards.R;
 
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-        openOffsetX = getResources ().getDimensionPixelSize(R.dimen.overlay_width);
+        final Resources resources = getResources();
 
-        fillPaint = new Paint();
-        fillPaint.setColor(0x66666666);
+        margin = resources.getDimensionPixelSize(R.dimen.overlay_button_margin);
+        openOffsetX = resources.getDimensionPixelSize(R.dimen.overlay_width);
 
-        strokePaint = new Paint();
-        strokePaint.setColor(0xFFFFFFFF);
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context, R.color.overlayAccent));
+        paint.setAntiAlias(true);
+
+        setElevation(resources.getDimensionPixelSize(R.dimen.overlay_button_elevation));
+
+        setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setOval(0, 0, getWidth(), getHeight());
+            }
+        });
+    }
+
+    /* package-private */ int getMargin() {
+        return margin;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        path = new Path();
-
-        path.moveTo(w, 0);
-        path.lineTo(w, h);
-        path.lineTo(0, h/2);
-        path.close();
-
-        points = new float[] {
-            w, 0,
-            0, h/2,
-            0, h/2,
-            w, h
-        };
+        centerX = w / 2;
+        centerY = h / 2;
     }
 
     /* package-private */ int getOpenOffsetX() {
@@ -67,14 +72,13 @@ import com.androidzeitgeist.webcards.R;
     }
 
     @Override
+    public ViewOutlineProvider getOutlineProvider() {
+        return super.getOutlineProvider();
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
-        if (path == null) {
-            return;
-        }
-
-        canvas.drawPath(path, fillPaint);
-
-        canvas.drawLines(points, strokePaint);
+        canvas.drawCircle(centerX, centerY, centerX, paint);
     }
 
     /* package-private */ void addToRoot() {
@@ -84,11 +88,11 @@ import com.androidzeitgeist.webcards.R;
             return;
         }
 
-        int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
+        int size = getResources().getDimensionPixelSize(R.dimen.overlay_button_size);
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
-                value,
-                value,
+                size,
+                size,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |

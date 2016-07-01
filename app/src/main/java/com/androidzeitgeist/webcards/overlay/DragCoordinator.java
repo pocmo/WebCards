@@ -79,7 +79,7 @@ import android.view.animation.AccelerateInterpolator;
             int translatedY = y - (windowHeight / 2) + (handleView.getHeight() / 2);
 
             if (isOpen) {
-                updateHandlePosition(translatedX, getHandleY());
+                updateHandlePosition(translatedX + handleView.getMargin(), getHandleY());
                 updateOverlayViewPosition(translatedX);
             } else {
                 updateHandlePosition(getHandleX(), translatedY);
@@ -166,7 +166,7 @@ import android.view.animation.AccelerateInterpolator;
     /* package-private */ void animateOpen() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, handleView.getOpenOffsetX());
+        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, handleView.getOpenOffsetX() + handleView.getMargin());
         animator.setDuration(250);
         animator.setInterpolator(new AccelerateInterpolator());
 
@@ -188,9 +188,10 @@ import android.view.animation.AccelerateInterpolator;
     public void setAnimationOffset(int x) {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
         layoutParams.x = x;
+
         windowManager.updateViewLayout(handleView, layoutParams);
 
-        updateOverlayViewPosition(x);
+        updateOverlayViewPosition(x - handleView.getMargin());
     }
 
     private void updateHandlePosition(int x, int y) {

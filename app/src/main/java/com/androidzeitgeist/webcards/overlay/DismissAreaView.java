@@ -57,7 +57,7 @@ import com.androidzeitgeist.webcards.R;
         strokePaint.setStrokeWidth(resources.getDimensionPixelSize(R.dimen.dismiss_indicator_stroke_width));
 
         highlightPaint = new Paint();
-        highlightPaint.setColor(resources.getColor(R.color.dismiss_indicator_highlight));
+        highlightPaint.setColor(resources.getColor(R.color.overlayAccent));
         highlightPaint.setStyle(Paint.Style.FILL);
     }
 
