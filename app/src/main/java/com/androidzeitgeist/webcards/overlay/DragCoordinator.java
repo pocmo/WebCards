@@ -10,19 +10,19 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-
-import com.androidzeitgeist.webcards.R;
 
 /**
  * Helper class for dragging the handle and coordinating the drag/animation state between handle
  * and overlay.
  */
 /* package-private */ class DragCoordinator implements View.OnTouchListener {
+    private static final int TAP_TIMEOUT = 2 * ViewConfiguration.getTapTimeout();
+
     private final WindowManager windowManager;
     private final OverlayView overlayView;
     private final HandleView handleView;
@@ -53,9 +53,7 @@ import com.androidzeitgeist.webcards.R;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (!isOpen) {
-                dismissAreaView.setVisibility(View.VISIBLE);
-            }
+
         }
 
         if (isHoveringOverDismissArea != isHoveringOverDismissArea()) {
@@ -66,6 +64,10 @@ import com.androidzeitgeist.webcards.R;
         }
 
         if (event.getAction() == MotionEvent.ACTION_MOVE | event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!isOpen && !couldBeATap(event)) {
+                dismissAreaView.setVisibility(View.VISIBLE);
+            }
+
             overlayView.setVisibility(View.VISIBLE);
 
             int xOffset = handleView.getWidth() / 2;
@@ -88,7 +90,9 @@ import com.androidzeitgeist.webcards.R;
             dismissAreaView.setVisibility(View.GONE);
             handleView.setVisibility(View.VISIBLE);
 
-            if (isHoveringOverDismissArea) {
+            if (couldBeATap(event) && !isOpen) {
+                animateOpen();
+            } else if (isHoveringOverDismissArea) {
                 OverlayController.get().removeOverlay();
             } else {
                 openOrCloseIfNeeded();
@@ -98,6 +102,10 @@ import com.androidzeitgeist.webcards.R;
         }
 
         return false;
+    }
+
+    private boolean couldBeATap(MotionEvent event) {
+        return event.getEventTime() <= event.getDownTime() + TAP_TIMEOUT;
     }
 
     private int getHandleX() {
