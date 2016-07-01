@@ -145,7 +145,7 @@ import android.view.animation.AccelerateInterpolator;
     /* package-private */ Animator animateClose() {
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
 
-        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, 0);
+        ObjectAnimator animator = ObjectAnimator.ofInt(this, "animationOffset", layoutParams.x, 0 - handleView.getWidth() / 2);
         animator.setDuration(250);
         animator.setInterpolator(new AccelerateInterpolator());
 
