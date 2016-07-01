@@ -6,6 +6,8 @@ package com.androidzeitgeist.webcards.overlay;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
@@ -23,15 +25,20 @@ import com.androidzeitgeist.webcards.R;
  * View representing the handle to drag the overlay.
  */
 /* package-private */ class HandleView extends View {
-    private WindowManager windowManager;
+    private final WindowManager windowManager;
 
-    private Paint paint;
+    private final Paint paint;
 
     private int centerX;
     private int centerY;
 
-    private int margin;
-    private int openOffsetX;
+    private final int margin;
+    private final int openOffsetX;
+
+    private final Bitmap streamBitmap;
+    private final Bitmap openAppBitmap;
+
+    private Bitmap currentBitmap;
 
     public HandleView(Context context) {
         super(context);
@@ -46,6 +53,10 @@ import com.androidzeitgeist.webcards.R;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.overlayAccent));
         paint.setAntiAlias(true);
+
+        streamBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_action_stream);
+        openAppBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_action_open_app);
+        currentBitmap = openAppBitmap;
 
         setElevation(resources.getDimensionPixelSize(R.dimen.overlay_button_elevation));
 
@@ -76,9 +87,16 @@ import com.androidzeitgeist.webcards.R;
         return super.getOutlineProvider();
     }
 
+    /* package-private */ void updateState(boolean isOpen) {
+        currentBitmap = isOpen ? openAppBitmap : streamBitmap;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawCircle(centerX, centerY, centerX, paint);
+
+        canvas.drawBitmap(currentBitmap, centerX - currentBitmap.getWidth() / 2, centerY - currentBitmap.getHeight() / 2, paint);
     }
 
     /* package-private */ void addToRoot() {

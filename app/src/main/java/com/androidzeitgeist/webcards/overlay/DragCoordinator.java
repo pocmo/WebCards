@@ -52,10 +52,6 @@ import android.view.animation.AccelerateInterpolator;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-        }
-
         if (isHoveringOverDismissArea != isHoveringOverDismissArea()) {
             isHoveringOverDismissArea = !isHoveringOverDismissArea;
 
@@ -153,6 +149,7 @@ import android.view.animation.AccelerateInterpolator;
             @Override
             public void onAnimationEnd(Animator animation) {
                 overlayView.setVisibility(View.GONE);
+                handleView.updateState(false);
 
                 isOpen = false;
             }
@@ -173,6 +170,8 @@ import android.view.animation.AccelerateInterpolator;
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                handleView.updateState(true);
+
                 isOpen = true;
             }
         });
