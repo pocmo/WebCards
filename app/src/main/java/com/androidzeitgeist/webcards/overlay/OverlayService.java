@@ -7,8 +7,11 @@ package com.androidzeitgeist.webcards.overlay;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.WebCard;
@@ -68,6 +71,12 @@ public class OverlayService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!canDrawOverlays()) {
+            Toast.makeText(this, R.string.toast_missing_permission, Toast.LENGTH_SHORT).show();
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         if (intent == null) {
             return START_NOT_STICKY;
         }
@@ -88,6 +97,14 @@ public class OverlayService extends Service {
         // processing an URL if the service got killed. But this will require that we track the
         // progress of the Intent / URL and that we can stop the service for this "startId" later.
         return START_NOT_STICKY;
+    }
+
+    private boolean canDrawOverlays() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return Settings.canDrawOverlays(this);
+        }
+
+        return true;
     }
 
     private void process(String url) {
