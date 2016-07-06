@@ -5,14 +5,12 @@
 package com.androidzeitgeist.webcards.overlay;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.net.Uri;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -74,6 +72,15 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
             // We do not have the permission to add a view to the window ("draw over other apps")
             Toast.makeText(getContext(), R.string.toast_missing_permission, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            OverlayController.get().stopTimeout();
+        }
+
+        return super.onInterceptTouchEvent(event);
     }
 
     /* package-private */ synchronized void removeFromRoot() {

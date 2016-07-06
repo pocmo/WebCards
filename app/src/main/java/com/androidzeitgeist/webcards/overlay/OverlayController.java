@@ -8,6 +8,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.customtabs.CustomTabsIntent;
 
 import com.androidzeitgeist.webcards.MainActivity;
@@ -18,7 +20,12 @@ import com.androidzeitgeist.webcards.viewer.PhotoActivity;
 import com.androidzeitgeist.webcards.viewer.VideoActivity;
 
 /* package-private */ class OverlayController implements ContentProcessor.ProcessorCallback {
+    private static final int OVERLAY_TIMEOUT = 4000;
+
     private static OverlayController instance;
+
+    private final Handler handler;
+    private Runnable timerRunnable;
 
     private OverlayService overlayService;
     private OverlayView overlayView;
@@ -32,6 +39,10 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
             instance = new OverlayController();
         }
         return instance;
+    }
+
+    public OverlayController() {
+        handler = new Handler(Looper.getMainLooper());
     }
 
     /* package-private */ void setOverlayService(OverlayService overlayService) {
@@ -72,6 +83,35 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
     /* package-private */ void openOverlay() {
         if (!dragCoordinator.isOpen()) {
             dragCoordinator.animateOpen();
+        }
+    }
+
+    /* package-private */ void startTimeout() {
+        synchronized (handler) {
+            stopTimeout();
+
+            timerRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    closeOverlay();
+                    timerRunnable = null;
+                }
+            };
+
+            handler.postDelayed(timerRunnable, OVERLAY_TIMEOUT);
+        }
+    }
+
+    /* package-private */ void stopTimeout() {
+        if (timerRunnable == null) {
+            return;
+        }
+
+        synchronized (handler) {
+            if (timerRunnable != null) {
+                handler.removeCallbacks(timerRunnable);
+                timerRunnable = null;
+            }
         }
     }
 

@@ -89,6 +89,7 @@ public class OverlayService extends Service {
         overlayView.removeCards();
 
         OverlayController.get().openOverlay();
+        OverlayController.get().startTimeout();
 
         process(url);
 

@@ -59,6 +59,10 @@ import android.view.animation.AccelerateInterpolator;
             dismissAreaView.setHighlight(isHoveringOverDismissArea);
         }
 
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            OverlayController.get().stopTimeout();
+        }
+
         if (event.getAction() == MotionEvent.ACTION_MOVE | event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!isOpen && !couldBeATap(event)) {
                 dismissAreaView.setVisibility(View.VISIBLE);
