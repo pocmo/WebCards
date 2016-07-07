@@ -85,8 +85,9 @@ public final class ItemClickSupport {
      *
      * @param listener The callback that will be invoked.
      */
-    public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
+    public ItemClickSupport setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
+        return this;
     }
 
     /**
@@ -95,11 +96,12 @@ public final class ItemClickSupport {
      *
      * @param listener The callback that will be invoked.
      */
-    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener listener) {
+    public ItemClickSupport setOnItemLongClickListener(@Nullable OnItemLongClickListener listener) {
         if (!mRecyclerView.isLongClickable()) {
             mRecyclerView.setLongClickable(true);
         }
         mOnItemLongClickListener = listener;
+        return this;
     }
 
     /**

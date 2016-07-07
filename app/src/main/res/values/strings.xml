@@ -2,4 +2,8 @@
     <string name="app_name">Web Cards</string>
 
     <string name="toast_missing_permission">Please enable permission to draw over other apps.</string>
+    <string name="toast_copy_clipboard">Address copied to clipboard.</string>
+
+    <string name="action_share">Share</string>
+    <string name="action_copy_address">Copy Address</string>
 </resources>

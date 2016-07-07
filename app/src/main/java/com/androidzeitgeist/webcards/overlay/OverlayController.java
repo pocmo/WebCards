@@ -6,13 +6,18 @@ package com.androidzeitgeist.webcards.overlay;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.customtabs.CustomTabsIntent;
+import android.widget.Toast;
 
 import com.androidzeitgeist.webcards.MainActivity;
+import com.androidzeitgeist.webcards.R;
 import com.androidzeitgeist.webcards.model.CardType;
 import com.androidzeitgeist.webcards.model.WebCard;
 import com.androidzeitgeist.webcards.processing.ContentProcessor;
@@ -152,5 +157,25 @@ import com.androidzeitgeist.webcards.viewer.VideoActivity;
                 removeOverlay();
             }
         });
+    }
+
+    /* package-private */ void share(WebCard card) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, card.getUrl());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        overlayService.startActivity(intent);
+
+        closeOverlay();
+    }
+
+    /* package-private */ void copyToClipboard(WebCard card) {
+        ClipboardManager clipboardManager = (ClipboardManager) overlayService.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager.setPrimaryClip(new ClipData("URL", new String[] { "text/plain" }, new ClipData.Item(card.getUrl())));
+
+        Toast.makeText(overlayService, R.string.toast_copy_clipboard, Toast.LENGTH_SHORT).show();
+
+        closeOverlay();
     }
 }

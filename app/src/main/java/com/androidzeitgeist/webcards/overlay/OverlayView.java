@@ -9,11 +9,14 @@ import android.graphics.PixelFormat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.AttributeSet;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.androidzeitgeist.webcards.R;
@@ -23,7 +26,7 @@ import com.androidzeitgeist.webcards.util.ItemClickSupport;
 /**
  * Root layout for the overlay.
  */
-public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemClickListener {
+public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemClickListener, ItemClickSupport.OnItemLongClickListener {
     private WindowManager windowManager;
     private WebCardAdapter adapter;
 
@@ -103,7 +106,9 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         adapter = new WebCardAdapter(recyclerView);
         recyclerView.setAdapter(adapter);
 
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(this);
+        ItemClickSupport.addTo(recyclerView)
+                .setOnItemClickListener(this)
+                .setOnItemLongClickListener(this);
 
         ItemTouchHelper touchHelper = new ItemTouchHelper(new WebCardTouchHelper(adapter));
         touchHelper.attachToRecyclerView(recyclerView);
@@ -128,5 +133,34 @@ public class OverlayView extends FrameLayout implements ItemClickSupport.OnItemC
         OverlayController.get().onCardClicked(card);
 
         adapter.removeCard(card);
+    }
+
+    @Override
+    public boolean onItemLongClicked(RecyclerView recyclerView, View view, int position) {
+        final WebCard card = adapter.getCard(position);
+
+        ContextThemeWrapper context = new ContextThemeWrapper(view.getContext(), android.R.style.Theme_Material_Light);
+
+        PopupMenu popupMenu = new PopupMenu(context, view);
+        popupMenu.inflate(R.menu.menu_card);
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                final int id = item.getItemId();
+
+                if (id == R.id.share) {
+                    OverlayController.get().share(card);
+                } else if (id == R.id.copy) {
+                    OverlayController.get().copyToClipboard(card);
+                }
+
+                return false;
+            }
+        });
+
+        popupMenu.show();
+
+        return true;
     }
 }
