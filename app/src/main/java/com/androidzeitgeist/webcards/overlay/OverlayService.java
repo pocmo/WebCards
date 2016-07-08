@@ -4,12 +4,15 @@
 
 package com.androidzeitgeist.webcards.overlay;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
@@ -20,6 +23,9 @@ import com.androidzeitgeist.webcards.processing.ContentProcessor;
 public class OverlayService extends Service {
     private static final String TAG = "WebCards/OverlayService";
 
+    private static final String ACTION_OPEN_LINK = "open_link";
+    private static final String ACTION_SHUTDOWN = "shutdown";
+
     private static final String EXTRA_URL = "url";
 
     private OverlayView overlayView;
@@ -28,6 +34,7 @@ public class OverlayService extends Service {
 
     public static void processUrl(Context context, String url) {
         Intent intent = new Intent(context, OverlayService.class);
+        intent.setAction(ACTION_OPEN_LINK);
         intent.putExtra(EXTRA_URL, url);
         context.startService(intent);
     }
@@ -48,6 +55,8 @@ public class OverlayService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        OverlayController.get().removeOverlay();
     }
 
     private void initializeOverlay() {
@@ -81,6 +90,11 @@ public class OverlayService extends Service {
             return START_NOT_STICKY;
         }
 
+        if (ACTION_SHUTDOWN.equals(intent.getAction())) {
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         final String url = intent.getStringExtra(EXTRA_URL);
         if (url == null) {
             return START_NOT_STICKY;
@@ -92,6 +106,10 @@ public class OverlayService extends Service {
         OverlayController.get().startTimeout();
 
         process(url);
+
+        // Show permanent notification so that the service does not get killed while displaying the
+        // overlay.
+        startForeground(1, createPermanentNotification());
 
         // For now we just start as not sticky. If the process dies later then the intent is not
         // redelivered. Eventually we might want to return START_REDELIVER_INTENT and resume
@@ -112,5 +130,22 @@ public class OverlayService extends Service {
         overlayView.addCard(WebCard.createPlaceholder(url));
 
         contentProcessor.process(url, new ContentProcessor.MainThreadProcessorCallback(OverlayController.get()));
+    }
+
+    private Notification createPermanentNotification() {
+        Intent intent = new Intent(this, OverlayService.class);
+        intent.setAction(ACTION_SHUTDOWN);
+
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+
+        return new NotificationCompat.Builder(this)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.notification_text))
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setShowWhen(false)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .setContentIntent(pendingIntent)
+                .build();
     }
 }

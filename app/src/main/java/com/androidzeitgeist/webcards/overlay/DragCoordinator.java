@@ -192,9 +192,13 @@ import android.view.animation.AccelerateInterpolator;
         WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) handleView.getLayoutParams();
         layoutParams.x = x;
 
-        windowManager.updateViewLayout(handleView, layoutParams);
+        try {
+            windowManager.updateViewLayout(handleView, layoutParams);
 
-        updateOverlayViewPosition(x - handleView.getMargin());
+            updateOverlayViewPosition(x - handleView.getMargin());
+        } catch (IllegalArgumentException e) {
+            // Overlay is no longer attached to window manager.
+        }
     }
 
     private void updateHandlePosition(int x, int y) {

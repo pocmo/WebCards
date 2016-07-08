@@ -6,4 +6,6 @@
 
     <string name="action_share">Share</string>
     <string name="action_copy_address">Copy Address</string>
+
+    <string name="notification_text">Tap to hide.</string>
 </resources>
